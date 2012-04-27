@@ -36,7 +36,7 @@ case class CombinedDistanceDocumentScorerSearchScript(val lat: Double,
         val popularity: Double = myDoc.numeric("decayedPopularity1").asInstanceOf[NumericDocFieldData[_]].getDoubleValue()
         // up to you to remove score from here or not..., also, possibly, add more weights options
         val myScore: Float = (score() *
-                (1 + weight1 * Math.pow(((1.0 * (Math.pow(point.distanceInKm(lat, lon), 2.0))) + 1.0), -1.0)
+                (1 + weight1 * math.pow(((1.0 * (math.pow(point.distanceInKm(lat, lon), 2.0))) + 1.0), -1.0)
                         + popularity * weight2)).toFloat;
       myScore
     }
