@@ -1,4 +1,4 @@
-package org.elasticsearch.foursquare;
+package com.foursquare.elasticsearch.scorer;
 
 import org.elasticsearch.plugins.AbstractPlugin;
 import org.elasticsearch.script.ScriptModule;
