@@ -23,7 +23,10 @@ libraryDependencies <++= (scalaVersion) { scalaVersion =>
     "org.scala-tools.testing" %% "specs"               % specsVersion % "test",
     "org.elasticsearch"        % "elasticsearch"  % "0.19.2",
     "org.scala-tools.testing" %% "scalacheck"         % scalaCheckVersion   % "test",
-    "org.scalaj"              %% "scalaj-collection" % "1.2"
+    "org.scalaj"              %% "scalaj-collection" % "1.2",
+    "org.testng"              % "testng" % "6.3.1" % "test",
+    "org.hamcrest"            % "hamcrest-core" % "1.3.RC2" % "test",
+    "org.hamcrest"            % "hamcrest-library" % "1.3.RC2" % "test"
   )
 }
 
