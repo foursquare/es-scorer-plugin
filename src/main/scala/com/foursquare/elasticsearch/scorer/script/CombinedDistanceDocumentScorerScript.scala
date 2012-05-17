@@ -15,29 +15,29 @@ import java.util.Map;
  * Note: assumes that the point field is point
  */
 case class CombinedDistanceDocumentScorerSearchScript(val lat: Double,
-    val lon: Double,
-    val weight1: Float,
-    val weight2: Float) extends AbstractFloatSearchScript {
+                                                      val lon: Double,
+                                                      val weight1: Float,
+                                                      val weight2: Float) extends AbstractFloatSearchScript {
 
   class Factory extends NativeScriptFactory {
-     def newScript(@Nullable params:  Map[String, Object]): ExecutableScript =  {
-            val lat: Double = if (params == null)  1 else XContentMapValues.nodeDoubleValue(params.get("lat"), 0);
-            val lon: Double = if (params == null) 1 else XContentMapValues.nodeDoubleValue(params.get("lon"), 0);
-            val weight1: Float = if(params == null)  1 else XContentMapValues.nodeFloatValue(params.get("weight1"), 5000.0f);
-            val weight2: Float = if(params == null)  1 else XContentMapValues.nodeFloatValue(params.get("weight2"), 0.05f);
-            return new CombinedDistanceDocumentScorerSearchScript(lat, lon, weight1, weight2);
-        }
+    def newScript(@Nullable params:  Map[String, Object]): ExecutableScript =  {
+      val lat: Double = if (params == null)  1 else XContentMapValues.nodeDoubleValue(params.get("lat"), 0);
+      val lon: Double = if (params == null) 1 else XContentMapValues.nodeDoubleValue(params.get("lon"), 0);
+      val weight1: Float = if(params == null)  1 else XContentMapValues.nodeFloatValue(params.get("weight1"), 5000.0f);
+      val weight2: Float = if(params == null)  1 else XContentMapValues.nodeFloatValue(params.get("weight2"), 0.05f);
+      return new CombinedDistanceDocumentScorerSearchScript(lat, lon, weight1, weight2);
     }
+  }
 
 
-    override def runAsFloat(): Float = {
-        val myDoc: DocLookup = doc();
-        val point: GeoPointDocFieldData = myDoc.get("point").asInstanceOf[GeoPointDocFieldData];
-        val popularity: Double = myDoc.numeric("decayedPopularity1").asInstanceOf[NumericDocFieldData[_]].getDoubleValue()
-        // up to you to remove score from here or not..., also, possibly, add more weights options
-        val myScore: Float = (score() *
-                (1 + weight1 * math.pow(((1.0 * (math.pow(point.distanceInKm(lat, lon), 2.0))) + 1.0), -1.0)
-                        + popularity * weight2)).toFloat;
-      myScore
-    }
+  override def runAsFloat(): Float = {
+    val myDoc: DocLookup = doc();
+    val point: GeoPointDocFieldData = myDoc.get("point").asInstanceOf[GeoPointDocFieldData];
+    val popularity: Double = myDoc.numeric("decayedPopularity1").asInstanceOf[NumericDocFieldData[_]].getDoubleValue()
+    // up to you to remove score from here or not..., also, possibly, add more weights options
+    val myScore: Float = (score() *
+                          (1 + weight1 * math.pow(((1.0 * (math.pow(point.distanceInKm(lat, lon), 2.0))) + 1.0), -1.0)
+                           + popularity * weight2)).toFloat;
+    myScore
+  }
 }
