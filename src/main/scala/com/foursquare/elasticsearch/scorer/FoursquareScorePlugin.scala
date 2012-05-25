@@ -12,6 +12,6 @@ class FourSquareScorePlugin extends AbstractPlugin {
   override def description(): String = "foursquare plugin";
 
   def onModule(module: ScriptModule): Unit = {
-    module.registerScript("distance_score_magic", classOf[CombinedDistanceDocumentScorerSearchScript#Factory]);
+    module.registerScript("distance_score_magic", classOf[ScoreFactory]);
   }
 }

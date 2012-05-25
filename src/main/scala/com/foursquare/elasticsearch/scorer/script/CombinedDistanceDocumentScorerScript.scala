@@ -19,17 +19,6 @@ case class CombinedDistanceDocumentScorerSearchScript(val lat: Double,
                                                       val weight1: Float,
                                                       val weight2: Float) extends AbstractFloatSearchScript {
 
-  class Factory extends NativeScriptFactory {
-    def newScript(@Nullable params:  Map[String, Object]): ExecutableScript =  {
-      val lat: Double = if (params == null)  1 else XContentMapValues.nodeDoubleValue(params.get("lat"), 0);
-      val lon: Double = if (params == null) 1 else XContentMapValues.nodeDoubleValue(params.get("lon"), 0);
-      val weight1: Float = if(params == null)  1 else XContentMapValues.nodeFloatValue(params.get("weight1"), 5000.0f);
-      val weight2: Float = if(params == null)  1 else XContentMapValues.nodeFloatValue(params.get("weight2"), 0.05f);
-      return new CombinedDistanceDocumentScorerSearchScript(lat, lon, weight1, weight2);
-    }
-  }
-
-
   override def runAsFloat(): Float = {
     val myDoc: DocLookup = doc();
     val point: GeoPointDocFieldData = myDoc.get("point").asInstanceOf[GeoPointDocFieldData];
@@ -39,5 +28,15 @@ case class CombinedDistanceDocumentScorerSearchScript(val lat: Double,
                           (1 + weight1 * math.pow(((1.0 * (math.pow(point.distanceInKm(lat, lon), 2.0))) + 1.0), -1.0)
                            + popularity * weight2)).toFloat;
     myScore
+  }
+}
+
+class ScoreFactory extends NativeScriptFactory {
+  def newScript(@Nullable params:  Map[String, Object]): ExecutableScript =  {
+    val lat: Double = if (params == null)  1 else XContentMapValues.nodeDoubleValue(params.get("lat"), 0);
+    val lon: Double = if (params == null) 1 else XContentMapValues.nodeDoubleValue(params.get("lon"), 0);
+    val weight1: Float = if(params == null)  1 else XContentMapValues.nodeFloatValue(params.get("weight1"), 5000.0f);
+    val weight2: Float = if(params == null)  1 else XContentMapValues.nodeFloatValue(params.get("weight2"), 0.05f);
+    return new CombinedDistanceDocumentScorerSearchScript(lat, lon, weight1, weight2);
   }
 }
