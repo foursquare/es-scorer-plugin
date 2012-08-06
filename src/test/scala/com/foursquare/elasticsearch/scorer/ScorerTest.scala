@@ -55,8 +55,8 @@ class DistanceScoreMagicSearchScriptTests {
         // we rely here on score being 1 since we are using match_all
         val distance: Double = GeoDistance.PLANE.calculate(40.7143528, -74.0059731, 40.759011, -73.9844722, DistanceUnit.KILOMETERS);
         assertThat(searchResponse.hits().getAt(0).score().toDouble.asInstanceOf[java.lang.Double],
-                closeTo(((1 + 2000 * math.pow(((1.0 * (math.pow(distance, 2.0))) + 1.0), -1.0)
-                        + 3 * 0.03).asInstanceOf[java.lang.Double]),
+                closeTo(((2000 * math.pow(((1.0 * (math.pow(distance, 2.0))) + 1.0), -1.0)
+                        * 3 * 0.03).asInstanceOf[java.lang.Double]),
                         0.00001.asInstanceOf[java.lang.Double]));
 
         node.close();

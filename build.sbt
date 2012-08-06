@@ -1,6 +1,6 @@
 name := "elasticsearch.scorer"
 
-version := "0.0.2-snapshot"
+version := "0.0.3-snapshot"
 
 organization := "com.foursquare"
 
